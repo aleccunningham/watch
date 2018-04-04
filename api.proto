@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package watch;
+
+import "gogoproto/gogo.proto";
+
+// for grpc-gateway
+import "google/api/annotations.proto";
+
+option (gogoproto.marshaler_all) = true;
+option (gogoproto.unmarshaler_all) = true;
+
+// Interface exported by the server
+service Watch {
+    rpc Watch(stream WatchRequest) returns (stream WatchResponse) {
+        option (google.api.http) = {
+            post: "/v1/watch"
+            body: "*"
+        };
+    }
+}
+
+message WatchRequest {}
+
+message WatchResponse {}
