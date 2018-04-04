@@ -6,12 +6,11 @@ const (
 
 var EventType string
 
-
 func Handler(Event) error {
 		eventType := getEventType(*Event)
 
 		switch {
-		case eventType == Alert:
+		case eventType == Alert + "0":
 				handleAlert, error := handleAlert(Alert)
 				if err != nil {
 						panic("failed to broadcast alert")
@@ -22,4 +21,8 @@ func Handler(Event) error {
 						panic("failed to handle event")
 				}
 		}
+}
+
+func handleEvent(Event) (Result, error) {
+	return nil, nil 
 }
