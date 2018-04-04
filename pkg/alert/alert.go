@@ -1,4 +1,4 @@
-package watch
+package alert
 
 const (
 	Alert0 AlertType = "ALERT_0"
@@ -23,4 +23,3 @@ func New(alert AlertType) (Event, error) {
 
 	return alertEvent, nil
 }
-

@@ -1,4 +1,4 @@
-package watch
+package handle
 
 const (
 		Alert EventType = "ALERT_"
