@@ -52,7 +52,7 @@ type WatcherEmitter interface {
 	Emitter
 }
 
-// Page is a less urgent WatcherEmitter
+// Pager is a less urgent WatcherEmitter
 // instead of Alerts, Page implements Notify()
 type Pager interface {
 	Notify(Event) error
