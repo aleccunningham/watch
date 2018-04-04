@@ -29,26 +29,41 @@ enum ETEnum {
     ALERT_7 = 7;
     ALERT_8 = 8;
     ALERT_9 = 9;
+    PAGE = 10;
+    AUDIO = 11;
 }
 
 message Node {
-    map<int, string> metadata = 1;
-    int id = 2;
-    Status status = 3;
+    int id = 1;
+    Status status = 2;
+    
+    map<int, string> metadata = 3;
 }
 
+// Device is a machine identified as an IoT device
+// that is used to handle and emit events to other IoT devices
 message Device {
-    map<int, string> metadata = 1;
-    int id = 2;
-    Status status = 3;
-
-message Event {
-    map<int, string> metadata = 1;
-    int id = 2;
-    Status status = 3;
-    EventType eventType = 4;
+   int id = 1;
+   Status status = 2;
+    
+   map<int, string> metadata = 3;
 }
 
+// Event is a representation of a object that must be handled
+// by the server. As it may be a running process, it has an associated Status.
+message Event {
+    int id = 1;
+    Status status = 2;
+    
+    map<int, string> metadata = 3;
+    
+    EventType eventType = 4;
+    bytes data = 5;
+}
+
+// EventType identifies the source of the event, allowing for
+// third party events. EventType handles alerts as their inherently
+// events, so we keep track of those, unlike pagers
 message EventType {
     bool isAlert = 1;
     ETEnum eventType = 2;
@@ -74,7 +89,7 @@ message AlertRequest {}
 
 message AlertResponse {}
 
-// Pager is a less urgent representation of and emiter
+// Pager is a less urgent representation of an emiter
 service Pager {
     rpc Notify(NotifyRequest) returns (NotifyResponse)
 }
