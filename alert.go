@@ -13,18 +13,14 @@ const (
 	Alert9 AlertType = "ALERT_9"
 )
 
-var AlertType struct {
-	level int
-}
+var AlertType string
 
-func Alert(alert AlertType) (Event, error) {
+func New(alert AlertType) (Event, error) {
 	alertEvent := NewAlertEvent(alert)
-
-	return alertEvent
-}
-
-func NewAlertEvent(alert AlertType) AlertType {
-	return &AlertType{
-		level: alert,
+	if err != nil {
+		panic("failed to create alert event")
 	}
+
+	return alertEvent, nil
 }
+
