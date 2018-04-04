@@ -7,26 +7,26 @@ import (
 // Node represents a struct that has a unique
 // id, and a status property returning a constant
 type Node struct {
-	id int
+	id int `json:"id,omitempty"`
 
-	status string
+	status string `json:"status,omitempty"`
 }
 
 // Device is a representation of a watch
 type Device struct {
-	id int
+	id int `json:"id,omitempty"`
 
-	status   string
-	metadata []byte // the devices hardware info
+	status   string `json:"status,omitempty"`
+	metadata []byte `json:"data,omitempty"` // the devices hardware info
 }
 
 // Event mirrors the Node struct but also
 // holds `n` bytes of data associated with it
 type Event struct {
-	id int
+	id int `json:"id,omitempty"`
 
-	status string
-	data   []byte
+	status string `json:"status,omitempty"`
+	data   []byte `json:"data,omitempty"`
 }
 
 // BatchRequest is a slice of Events that are
