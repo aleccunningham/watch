@@ -10,16 +10,75 @@ import "google/api/annotations.proto";
 option (gogoproto.marshaler_all) = true;
 option (gogoproto.unmarshaler_all) = true;
 
-// Interface exported by the server
-service Watch {
-    rpc Watch(stream WatchRequest) returns (stream WatchResponse) {
-        option (google.api.http) = {
-            post: "/v1/watch"
-            body: "*"
-        };
-    }
+enum Status {
+    option allow_alias = true;
+    UNKNOWN = 0;
+    STARTED = 1;
+    RUNNING = 2;
+}
+
+enum ETEnum {
+    option_allow_alias = true;
+    ALERT_0 = 0;
+    ALERT_1 = 1;
+    ALERT_2 = 2;
+    ALERT_3 = 3;
+    ALERT_4 = 4;
+    ALERT_5 = 5;
+    ALERT_6 = 6;
+    ALERT_7 = 7;
+    ALERT_8 = 8;
+    ALERT_9 = 9;
+}
+
+message Node {
+    map<int, string> metadata = 1;
+    int id = 2;
+    Status status = 3;
+}
+
+message Device {
+    map<int, string> metadata = 1;
+    int id = 2;
+    Status status = 3;
+
+message Event {
+    map<int, string> metadata = 1;
+    int id = 2;
+    Status status = 3;
+    EventType eventType = 4;
+}
+
+message EventType {
+    bool isAlert = 1;
+    ETEnum eventType = 2;
+}
+
+// Watch is responsible for handling and normalizing
+// an external event POSTing to the agent
+service Watcher {
+    rpc Watch(stream WatchRequest) returns (stream WatchResponse)
 }
 
 message WatchRequest {}
 
 message WatchResponse {}
+
+// Emiter provides a alerting service in case
+// of certain events occuring
+service Emiter {
+    rpc Alert(AlertRequest) returns (AlertResponse)
+}
+
+message AlertRequest {}
+
+message AlertResponse {}
+
+// Pager is a less urgent representation of and emiter
+service Pager {
+    rpc Notify(NotifyRequest) returns (NotifyResponse)
+}
+
+message NotifyRequest {}
+
+message NotifyResponse {}
