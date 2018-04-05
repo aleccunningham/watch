@@ -40,20 +40,10 @@ message Node {
     map<int, string> metadata = 3;
 }
 
-// Device is a machine identified as an IoT device
-// that is used to handle and emit events to other IoT devices
-message Device {
-   int id = 1;
-   Status status = 2;
-    
-   map<int, string> metadata = 3;
-}
-
 // Event is a representation of a object that must be handled
 // by the server. As it may be a running process, it has an associated Status.
 message Event {
     int id = 1;
-    Status status = 2;
     
     map<int, string> metadata = 3;
     
@@ -69,31 +59,65 @@ message EventType {
     ETEnum eventType = 2;
 }
 
+message HealthCheckRequest {
+  string service = 1;
+}
+
+message HealthCheckResponse {
+  enum ServingStatus {
+    UNKNOWN = 0;
+    SERVING = 1;
+    NOT_SERVING = 2;
+  }
+  ServingStatus status = 1;
+}
+
+// Generic healthcheck for nodes
+service Health {
+  rpc Check(HealthCheckRequest) returns (HealthCheckResponse);
+}
+
 // Watch is responsible for handling and normalizing
 // an external event POSTing to the agent
-service Watcher {
+service Watch {
     rpc Watch(stream WatchRequest) returns (stream WatchResponse)
 }
 
-message WatchRequest {}
+message WatchRequest {
+    string id = 1;
+}
 
-message WatchResponse {}
+message WatchResponse {
+    string id = 1;
+}
 
-// Emiter provides a alerting service in case
+// Emit provides a alerting service in case
 // of certain events occuring
-service Emiter {
+service Emit {
     rpc Alert(AlertRequest) returns (AlertResponse)
 }
 
-message AlertRequest {}
+message AlertRequest {
+    string id = 1;
+    // Event data for an alert
+    bytes data = 2;
+}
 
-message AlertResponse {}
+message AlertResponse {
+    string id = 1;
+}
 
-// Pager is a less urgent representation of an emiter
-service Pager {
+// Page is a less urgent representation of an emiter
+service Page {
     rpc Notify(NotifyRequest) returns (NotifyResponse)
 }
 
-message NotifyRequest {}
+message NotifyRequest {
+    string id = 1;
+    // Event data for a notification
+    bytes data = 2;
+}
 
-message NotifyResponse {}
+message NotifyResponse {
+    string id = 1;
+}
