@@ -59,17 +59,39 @@ message EventType {
     ETEnum eventType = 2;
 }
 
+message HealthCheckRequest {
+  string service = 1;
+}
+
+message HealthCheckResponse {
+  enum ServingStatus {
+    UNKNOWN = 0;
+    SERVING = 1;
+    NOT_SERVING = 2;
+  }
+  ServingStatus status = 1;
+}
+
+// Generic healthcheck for nodes
+service Health {
+  rpc Check(HealthCheckRequest) returns (HealthCheckResponse);
+}
+
 // Watch is responsible for handling and normalizing
 // an external event POSTing to the agent
 service Watcher {
     rpc Watch(stream WatchRequest) returns (stream WatchResponse);
 }
 
-message WatchRequest {}
+message WatchRequest {
+    string id = 1;
+}
 
-message WatchResponse {}
+message WatchResponse {
+    string id = 1;
+}
 
-// Emiter provides a alerting service in case
+// Emit provides a alerting service in case
 // of certain events occuring
 service Emiter {
     rpc Alert(AlertRequest) returns (AlertResponse);
