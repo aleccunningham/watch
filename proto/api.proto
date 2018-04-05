@@ -2,23 +2,13 @@ syntax = "proto3";
 
 package watch;
 
-import "gogoproto/gogo.proto";
-
-// for grpc-gateway
-import "google/api/annotations.proto";
-
-option (gogoproto.marshaler_all) = true;
-option (gogoproto.unmarshaler_all) = true;
-
 enum Status {
-    option allow_alias = true;
     UNKNOWN = 0;
     STARTED = 1;
     RUNNING = 2;
 }
 
 enum ETEnum {
-    option_allow_alias = true;
     ALERT_0 = 0;
     ALERT_1 = 1;
     ALERT_2 = 2;
@@ -34,29 +24,29 @@ enum ETEnum {
 }
 
 message Node {
-    int id = 1;
+    int64 id = 1;
     Status status = 2;
-    
-    map<int, string> metadata = 3;
+
+    map<int64, string> metadata = 3;
 }
 
 // Device is a machine identified as an IoT device
 // that is used to handle and emit events to other IoT devices
 message Device {
-   int id = 1;
+   int64 id = 1;
    Status status = 2;
-    
-   map<int, string> metadata = 3;
+
+   map<int64, string> metadata = 3;
 }
 
 // Event is a representation of a object that must be handled
 // by the server. As it may be a running process, it has an associated Status.
 message Event {
-    int id = 1;
+    int64 id = 1;
     Status status = 2;
-    
-    map<int, string> metadata = 3;
-    
+
+    map<int64, string> metadata = 3;
+
     EventType eventType = 4;
     bytes data = 5;
 }
@@ -72,7 +62,7 @@ message EventType {
 // Watch is responsible for handling and normalizing
 // an external event POSTing to the agent
 service Watcher {
-    rpc Watch(stream WatchRequest) returns (stream WatchResponse)
+    rpc Watch(stream WatchRequest) returns (stream WatchResponse);
 }
 
 message WatchRequest {}
@@ -82,18 +72,29 @@ message WatchResponse {}
 // Emiter provides a alerting service in case
 // of certain events occuring
 service Emiter {
-    rpc Alert(AlertRequest) returns (AlertResponse)
+    rpc Alert(AlertRequest) returns (AlertResponse);
 }
 
-message AlertRequest {}
+message AlertRequest {
+    string id = 1;
+    // Event data for an alert
+    bytes data = 2;
+}
 
-message AlertResponse {}
-
+message AlertResponse {
+    string id = 1;
+}
 // Pager is a less urgent representation of an emiter
 service Pager {
-    rpc Notify(NotifyRequest) returns (NotifyResponse)
+    rpc Notify(NotifyRequest) returns (NotifyResponse);
 }
 
-message NotifyRequest {}
+message NotifyRequest {
+    string id = 1;
+    // Event data for a notification
+    bytes data = 2;
+}
 
-message NotifyResponse {}
+message NotifyResponse {
+    string id = 1;
+}

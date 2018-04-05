@@ -1,9 +1,5 @@
 package watch
 
-import (
-	"io"
-)
-
 // Node represents a struct that has a unique
 // id, and a status property returning a constant
 type Node struct {

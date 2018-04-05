@@ -1,4 +1,4 @@
-package handle
+package watch
 
 const (
 		Alert EventType = "ALERT_"
@@ -24,5 +24,5 @@ func Handler(Event) error {
 }
 
 func handleEvent(Event) (Result, error) {
-	return nil, nil 
+	return nil, nil
 }

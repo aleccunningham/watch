@@ -1,4 +1,4 @@
-package alert
+package watch
 
 const (
 	Alert0 AlertType = "ALERT_0"
